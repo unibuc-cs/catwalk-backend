@@ -1,0 +1,85 @@
+POST /api/auth/signup HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "email": "alex",
+    "password": "12345678",
+    "role": ["user"]
+}
+
+================================================================================
+
+POST /api/auth/signup HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "email": "admin",
+    "password": "admin",
+    "role": ["admin"]
+}
+
+================================================================================
+
+GET /api/test/all HTTP/1.1
+Host: localhost:8080
+
+================================================================================
+
+POST /api/auth/signin HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "email": "alex",
+    "password": "12345678"
+}
+
+Response:
+{
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGV4IiwiaWF0IjoxNjA0MjU4MTc0LCJleHAiOjE2MDQzNDQ1NzR9.Hi4DD7AjacjDa0wjEhusX8-T18L33fHWJ-Q89IRzVtmlbihOftNN0RA49Dd71iVfPLbg7RrXt9aqELzmGxpXLQ",
+    "type": "Bearer",
+    "id": "5c371512-ef64-40bb-9e17-30fa1935ff6b",
+    "email": "alex",
+    "roles": [
+        "ROLE_USER"
+    ]
+}
+
+================================================================================
+
+GET /api/test/user HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhbGV4IiwiaWF0IjoxNjA0MjU4MTc0LCJleHAiOjE2MDQzNDQ1NzR9.Hi4DD7AjacjDa0wjEhusX8-T18L33fHWJ-Q89IRzVtmlbihOftNN0RA49Dd71iVfPLbg7RrXt9aqELzmGxpXLQ
+
+================================================================================
+
+POST /api/auth/signin HTTP/1.1
+Host: localhost:8080
+Content-Type: application/json
+
+{
+    "email": "admin",
+    "password": "admin"
+}
+
+Response:
+{
+    "token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYwNDI1ODI0OCwiZXhwIjoxNjA0MzQ0NjQ4fQ.yQYgoDNpUcCLbwmypHRB9_5MaRpaXGk8L9MVFjrPEVtN9rDXngU3sM5s1-96-HBrsFi5PYMlkCtiBS_sRPOUAw",
+    "type": "Bearer",
+    "id": "5ac81909-1820-45b5-90eb-1059652b044f",
+    "email": "admin",
+    "roles": [
+        "ROLE_ADMIN"
+    ]
+}
+
+================================================================================
+
+GET /api/test/admin HTTP/1.1
+Host: localhost:8080
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImlhdCI6MTYwNDI1ODI0OCwiZXhwIjoxNjA0MzQ0NjQ4fQ.yQYgoDNpUcCLbwmypHRB9_5MaRpaXGk8L9MVFjrPEVtN9rDXngU3sM5s1-96-HBrsFi5PYMlkCtiBS_sRPOUAw
+
+
+
