@@ -1,9 +1,6 @@
 package com.catwalk.publicapicatwalk.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
@@ -11,12 +8,13 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class LoginRequest {
 
-    @NotBlank
+    @NotBlank(message = "{email.notblank}")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "{password.notblank}")
     private String password;
 
 }

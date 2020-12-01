@@ -1,7 +1,6 @@
 package com.catwalk.publicapicatwalk.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -18,6 +17,9 @@ import javax.validation.constraints.Size;
         })
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends GenericEntity {
 
     @NotBlank(message = "{firstName.notblank}")
@@ -34,13 +36,9 @@ public class User extends GenericEntity {
     private String email;
 
     @NotBlank(message = "{password.notblank}")
-    @Size(min = 6, max = 32, message = "{password.size}")
     private String password;
 
     private String role;
-
-    public User() {
-    }
 
     public User(String username, String email, String password) {
         this.email = email;

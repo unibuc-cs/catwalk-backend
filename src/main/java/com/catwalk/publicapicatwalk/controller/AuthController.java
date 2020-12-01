@@ -1,5 +1,6 @@
 package com.catwalk.publicapicatwalk.controller;
 
+import com.catwalk.publicapicatwalk.controller.web.Api;
 import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.controller.web.dto.ResponseDto;
 import com.catwalk.publicapicatwalk.dto.JwtResponse;
@@ -24,8 +25,10 @@ import static com.catwalk.publicapicatwalk.controller.web.ErrorCode.EMAIL_NOT_UN
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping(value = AuthController.PATH)
 public class AuthController {
+
+    public static final String PATH = Api.BASE_PATH + "/auth";
 
     @Autowired
     AuthenticationManager authenticationManager;
