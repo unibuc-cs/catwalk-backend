@@ -1,5 +1,6 @@
 package com.catwalk.publicapicatwalk.model;
 
+import com.catwalk.publicapicatwalk.model.constants.Sex;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -7,6 +8,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -36,7 +38,20 @@ public class User extends GenericEntity {
     private String email;
 
     @NotBlank(message = "{password.notblank}")
+    @Size(min = 6, message = "{password.size}")
     private String password;
+
+    @NotNull(message = "{sex.notblank}")
+    private Sex sex;
+
+    @NotNull(message = "{intaltime.notblank}")
+    private Double inaltime; // m
+
+    @NotNull(message = "{greutate.notblank}")
+    private Double greutate; // kg
+
+    @NotNull(message = "{varsta.notblank}")
+    private Integer varsta; // ani
 
     private String role;
 

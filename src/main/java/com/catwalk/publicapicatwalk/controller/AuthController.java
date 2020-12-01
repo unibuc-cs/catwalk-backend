@@ -5,7 +5,6 @@ import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.controller.web.dto.ResponseDto;
 import com.catwalk.publicapicatwalk.dto.JwtResponse;
 import com.catwalk.publicapicatwalk.dto.LoginRequest;
-import com.catwalk.publicapicatwalk.dto.SignupRequest;
 import com.catwalk.publicapicatwalk.exception.GenericException;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
@@ -59,17 +58,14 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
-        if (userRepository.existsByEmail(signUpRequest.getEmail())) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody User oRequest) {
+        if (userRepository.existsByEmail(oRequest.getEmail())) {
             throw new GenericException(EMAIL_NOT_UNIQUE);
         }
 
-        User user = new User(signUpRequest.getEmail(), signUpRequest.getEmail(), encoder.encode(signUpRequest.getPassword()));
-
-        user.setFirstName(signUpRequest.getFirstName());
-        user.setLastName(signUpRequest.getLastName());
-        user.setRole("USER");
-        userRepository.save(user);
+        oRequest.setPassword(encoder.encode(oRequest.getPassword()));
+        oRequest.setRole("ROLE_USER");
+        userRepository.save(oRequest);
 
         ResponseDto oResponse = ResponseDto.builder().status(StatusCode.SUCCESS).build();
 

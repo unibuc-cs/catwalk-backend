@@ -5,6 +5,7 @@ import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.dto.LoginRequest;
 import com.catwalk.publicapicatwalk.dto.SignupRequest;
 import com.catwalk.publicapicatwalk.model.User;
+import com.catwalk.publicapicatwalk.model.constants.Sex;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.catwalk.publicapicatwalk.security.jwt.JwtUtils;
 import org.json.JSONObject;
@@ -52,14 +53,22 @@ class AuthControllerTest extends GenericIntegrationTest {
                 .password(encoder.encode("Parola123"))
                 .firstName("User")
                 .lastName("Test")
-                .role("USER")
+                .role("ROLE_USER")
+                .sex(Sex.Masculin)
+                .greutate(60.5)
+                .inaltime(1.75)
+                .varsta(20)
                 .build();
         User oAdminDummyUser = User.builder()
                 .email("admin@catwalk.ro")
                 .password(encoder.encode("Parola123"))
                 .firstName("User")
                 .lastName("Test")
-                .role("ADMIN")
+                .role("ROLE_ADMIN")
+                .sex(Sex.Feminin)
+                .greutate(60.5)
+                .inaltime(1.75)
+                .varsta(20)
                 .build();
         userRepository.saveAll(Arrays.asList(oDummyUser, oAdminDummyUser));
     }
@@ -72,6 +81,10 @@ class AuthControllerTest extends GenericIntegrationTest {
                 .password("Parola123")
                 .firstName("User")
                 .lastName("Test")
+                .sex(Sex.Feminin)
+                .greutate(60.5)
+                .inaltime(1.75)
+                .varsta(20)
                 .build();
 
         // act
@@ -93,6 +106,10 @@ class AuthControllerTest extends GenericIntegrationTest {
                 .password("Parola123")
                 .firstName("User")
                 .lastName("Test")
+                .sex(Sex.Feminin)
+                .greutate(60.5)
+                .inaltime(1.75)
+                .varsta(20)
                 .build();
 
         // act
@@ -114,6 +131,10 @@ class AuthControllerTest extends GenericIntegrationTest {
                 .email("validation_error@catwalk.ro")
                 .password("1234")
                 .lastName("User")
+                .sex(Sex.Feminin)
+                .greutate(60.5)
+                .inaltime(1.75)
+                .varsta(20)
                 .build();
 
         // act
@@ -125,7 +146,7 @@ class AuthControllerTest extends GenericIntegrationTest {
         // assert
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
-        assertThat(oJSONResponse.getJSONObject("data").get("firstName")).isEqualTo("Prenumele este obligatoriu");
+        assertThat(oJSONResponse.getJSONObject("data").get("firstName")).isEqualTo("Campul 'Prenume' este obligatoriu");
         assertThat(oJSONResponse.getJSONObject("data").get("password")).isEqualTo("Parola trebuie sa aiba intre 6 si 32 de caractere");
     }
 
@@ -166,8 +187,8 @@ class AuthControllerTest extends GenericIntegrationTest {
         // assert
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
-        assertThat(oJSONResponse.getJSONObject("data").get("email")).isEqualTo("Adresa de e-mail este obligatorie");
-        assertThat(oJSONResponse.getJSONObject("data").get("password")).isEqualTo("Parola este obligatorie");
+        assertThat(oJSONResponse.getJSONObject("data").get("email")).isEqualTo("Campul 'E-mail' este obligatoriu");
+        assertThat(oJSONResponse.getJSONObject("data").get("password")).isEqualTo("Campul 'Parola' este obligatoriu");
     }
 
     @Test
