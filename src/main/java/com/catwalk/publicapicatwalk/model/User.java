@@ -20,21 +20,21 @@ import javax.validation.constraints.Size;
 @Setter
 public class User extends GenericEntity {
 
-    @NotBlank
+    @NotBlank(message = "{firstName.notblank}")
     @Size(max = 50)
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "{lastName.notblank}")
     @Size(max = 50)
     private String lastName;
 
-    @NotBlank
+    @NotBlank(message = "{email.notblank}")
     @Size(max = 50)
     @Email
     private String email;
 
-    @NotBlank
-    @Size(max = 120)
+    @NotBlank(message = "{password.notblank}")
+    @Size(min = 6, max = 32, message = "{password.size}")
     private String password;
 
     private String role;

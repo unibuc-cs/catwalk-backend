@@ -6,11 +6,18 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.HashMap;
+import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -18,11 +25,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     public ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
                                                        HttpStatus status, WebRequest request) {
+        BindingResult result = ex.getBindingResult();
+        List<FieldError> fieldErrors = result.getFieldErrors();
+        HashMap<String, String> errors = new HashMap<>();
+        for(FieldError fieldError : fieldErrors) {
+            errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+
         ResponseDto oResponse = ResponseDto.builder()
-                .status(StatusCode.ERROR)
-                .errorMessage("There was a problem processing your request. Please try again later.")
+                .status(StatusCode.FAIL)
+                .data(errors)
                 .build();
-        return new ResponseEntity<ResponseDto>(oResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(oResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(GenericException.class)
@@ -31,7 +45,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(e.getErrorCode().getStatus())
                 .errorMessage(e.getErrorCode().getMessage())
                 .build();
-        return new ResponseEntity<ResponseDto>(oResponse, e.getErrorCode().getHttpStatusCode());
+        return new ResponseEntity<>(oResponse, e.getErrorCode().getHttpStatusCode());
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -40,7 +54,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .status(StatusCode.ERROR)
                 .errorMessage(ErrorCode.WRONG_CREDENTIALS.getMessage())
                 .build();
-        return new ResponseEntity<ResponseDto>(oResponse, ErrorCode.WRONG_CREDENTIALS.getHttpStatusCode());
+        return new ResponseEntity<>(oResponse, ErrorCode.WRONG_CREDENTIALS.getHttpStatusCode());
     }
 
 }

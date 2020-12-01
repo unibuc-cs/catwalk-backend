@@ -16,20 +16,20 @@ import java.util.Set;
 @AllArgsConstructor
 public class SignupRequest {
 
-    @NotBlank
+    @NotBlank(message = "{email.notblank}")
     @Size(max = 50)
     @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 6, max = 40)
+    @NotBlank(message = "{password.notblank}")
+    @Size(min = 6, max = 32, message = "{password.size}")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "{firstName.notblank}")
     @Size(max = 50)
     private String firstName;
 
-    @NotBlank
+    @NotBlank(message = "{lastName.notblank}")
     @Size(max = 50)
     private String lastName;
 
