@@ -1,32 +1,35 @@
 package com.catwalk.publicapicatwalk.controller.web;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 public enum ErrorCode {
-    CREATE_FAILURE("GENERAL_CREATION_ERROR", "Creation failure", 500),
-    UPDATE_FAILURE("GENERAL_UPDATE_ERROR", "Update failure", 500),
-    PATCH_FAILURE("GENERAL_PATCH_ERROR", "Patch failure", 500),
-    DELETE_FAILURE("GENERAL_DELETE_ERROR", "Delete failure", 500),
+    CREATE_FAILURE("GENERAL_CREATION_ERROR", "Creation failure", StatusCode.FAIL, HttpStatus.BAD_REQUEST),
+    UPDATE_FAILURE("GENERAL_UPDATE_ERROR", "Update failure", StatusCode.FAIL, HttpStatus.BAD_REQUEST),
+    PATCH_FAILURE("GENERAL_PATCH_ERROR", "Patch failure", StatusCode.FAIL, HttpStatus.BAD_REQUEST),
+    DELETE_FAILURE("GENERAL_DELETE_ERROR", "Delete failure", StatusCode.FAIL, HttpStatus.BAD_REQUEST),
 
-    GENERAL_UNEXPECTED_ERROR("GENERAL_UNEXPECTED_EXCEPTION", "Unexpected exception", 500),
-    GENERAL_VALIDATION_ERROR("GENERAL_VALIDATION_ERROR", "General validation error", 500),
-    GENERAL_NOT_FOUND_ERROR("GENERAL_NOT_FOUND_ERROR", "Not found entity exception", 404);
+    GENERAL_UNEXPECTED_ERROR("GENERAL_UNEXPECTED_EXCEPTION", "Unexpected exception", StatusCode.FAIL, HttpStatus.BAD_REQUEST),
+    GENERAL_VALIDATION_ERROR("GENERAL_VALIDATION_ERROR", "General validation error", StatusCode.FAIL, HttpStatus.BAD_REQUEST),
+    GENERAL_NOT_FOUND_ERROR("GENERAL_NOT_FOUND_ERROR", "Not found entity exception", StatusCode.ERROR, HttpStatus.NOT_FOUND),
 
-    @JsonProperty("code")
+    // User
+    EMAIL_NOT_UNIQUE("EMAIL_NOT_UNIQUE", "Email is already in use!", StatusCode.ERROR, HttpStatus.BAD_REQUEST),
+    WRONG_CREDENTIALS("WRONG_CREDENTIALS", "The email and password provided are incorrect!", StatusCode.ERROR, HttpStatus.BAD_REQUEST);
+
     private String code;
 
-    @JsonProperty("message")
+    private StatusCode status;
+
     private String message;
 
-    @JsonIgnore
-    private Integer status;
+    private HttpStatus httpStatusCode;
 
-    ErrorCode(String code, String message, Integer status) {
+    ErrorCode(String code, String message, StatusCode status, HttpStatus httpStatusCode) {
         this.code = code;
         this.message = message;
         this.status = status;
+        this.httpStatusCode = httpStatusCode;
     }
 }

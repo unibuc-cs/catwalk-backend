@@ -3,10 +3,9 @@ package com.catwalk.publicapicatwalk.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
@@ -23,6 +22,14 @@ public class User extends GenericEntity {
 
     @NotBlank
     @Size(max = 50)
+    private String firstName;
+
+    @NotBlank
+    @Size(max = 50)
+    private String lastName;
+
+    @NotBlank
+    @Size(max = 50)
     @Email
     private String email;
 
@@ -30,11 +37,7 @@ public class User extends GenericEntity {
     @Size(max = 120)
     private String password;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(	name = "user_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roles = new HashSet<>();
+    private String role;
 
     public User() {
     }
@@ -42,6 +45,10 @@ public class User extends GenericEntity {
     public User(String username, String email, String password) {
         this.email = email;
         this.password = password;
+    }
+
+    public String getFullname() {
+        return this.firstName + " " + this.lastName;
     }
 
 }

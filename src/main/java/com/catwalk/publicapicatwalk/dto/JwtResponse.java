@@ -1,11 +1,10 @@
 package com.catwalk.publicapicatwalk.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -13,21 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class JwtResponse {
 
+    @JsonProperty("token")
     private String token;
-
-    private String type = "Bearer";
-
-    private String id;
-
-    private String email;
-
-    private List<String> roles;
-
-    public JwtResponse(String accessToken, String id, String email, List<String> roles) {
-        this.token = accessToken;
-        this.id = id;
-        this.email = email;
-        this.roles = roles;
-    }
 
 }

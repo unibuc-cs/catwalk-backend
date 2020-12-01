@@ -1,18 +1,14 @@
 package com.catwalk.publicapicatwalk.service;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
 import com.catwalk.publicapicatwalk.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Collection;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -24,34 +20,33 @@ public class UserDetailsImpl implements UserDetails {
 
     private String email;
 
+    private String name;
+
     @JsonIgnore
     private String password;
 
-    private Collection<? extends GrantedAuthority> authorities;
+    private String role;
 
-    public UserDetailsImpl(String id, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(String id, String email, String password, String role, String name) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.authorities = authorities;
+        this.role = role;
+        this.name = name;
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
-
         return new UserDetailsImpl(
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                authorities);
+                user.getRole(),
+                user.getFullname());
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities;
+        return null;
     }
 
     @Override

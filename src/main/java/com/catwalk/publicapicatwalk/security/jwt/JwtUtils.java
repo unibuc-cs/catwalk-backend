@@ -1,14 +1,16 @@
 package com.catwalk.publicapicatwalk.security.jwt;
 
-import java.util.Date;
-
 import com.catwalk.publicapicatwalk.service.UserDetailsImpl;
+import io.jsonwebtoken.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
-import io.jsonwebtoken.*;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtUtils {
@@ -29,6 +31,8 @@ public class JwtUtils {
                 .setSubject((userPrincipal.getUsername()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .claim("role", userPrincipal.getRole())
+                .claim("name", userPrincipal.getName())
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
