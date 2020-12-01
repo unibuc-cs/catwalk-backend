@@ -9,20 +9,16 @@ import com.catwalk.publicapicatwalk.exception.GenericException;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.catwalk.publicapicatwalk.security.jwt.JwtUtils;
-import com.catwalk.publicapicatwalk.service.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.catwalk.publicapicatwalk.controller.web.ErrorCode.EMAIL_NOT_UNIQUE;
 
