@@ -2,6 +2,7 @@ package com.catwalk.publicapicatwalk.controller;
 
 import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.dto.LoginRequest;
+import com.catwalk.publicapicatwalk.dto.UserResponseDto;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
@@ -17,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -87,7 +90,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedIfBearerIsMissing() throws Exception {
+    void shouldReturnUnauthorizedIfBearerIsMissingWhenRetrievingProfile() throws Exception {
         // act
         MvcResult oResponse = mockMvc
                 .perform(createGetRequest(ProfileController.PATH))
@@ -98,10 +101,71 @@ class ProfileControllerTest extends GenericIntegrationTest {
     }
 
     @Test
-    void shouldReturnUnauthorizedIfBearerIsInvalid() throws Exception {
+    void shouldReturnUnauthorizedIfBearerIsInvalidWhenRetrievingProfile() throws Exception {
         // act
         MvcResult oResponse = mockMvc
                 .perform(createGetRequest(ProfileController.PATH, "WRONG_TOKEN"))
+                .andReturn();
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void shouldUpdateProfileSuccessfully() throws Exception {
+        // arrange
+        UserResponseDto oRequest = UserResponseDto.builder()
+                .email("user123@catwalk.ro")
+                .firstName("Andreea")
+                .lastName("Popescu")
+                .sex(Sex.Feminin)
+                .varsta(24)
+                .build();
+
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPutRequest(ProfileController.PATH, oRequest, sBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("email")).isEqualTo(oDummyUser.getEmail());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("firstName")).isEqualTo(oRequest.getFirstName());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("lastName")).isEqualTo(oRequest.getLastName());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("sex")).isEqualTo(oRequest.getSex().toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("inaltime")).isEqualTo(oDummyUser.getInaltime());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("greutate")).isEqualTo(oDummyUser.getGreutate());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("varsta")).isEqualTo(oRequest.getVarsta());
+
+        // DB-level assert
+        Optional<User> oDbUser = userRepository.findByEmail(oDummyUser.getEmail());
+        assertThat(oDbUser.get().getEmail()).isEqualTo(oDummyUser.getEmail());
+        assertThat(oDbUser.get().getFirstName()).isEqualTo(oRequest.getFirstName());
+        assertThat(oDbUser.get().getLastName()).isEqualTo(oRequest.getLastName());
+        assertThat(oDbUser.get().getSex().toString()).isEqualTo(oRequest.getSex().toString());
+        assertThat(oDbUser.get().getInaltime()).isEqualTo(oDummyUser.getInaltime());
+        assertThat(oDbUser.get().getGreutate()).isEqualTo(oDummyUser.getGreutate());
+        assertThat(oDbUser.get().getVarsta()).isEqualTo(oRequest.getVarsta());
+    }
+
+    @Test
+    void shouldReturnUnauthorizedIfBearerIsMissingWhenUpdatingProfile() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPutRequest(ProfileController.PATH, oDummyUser))
+                .andReturn();
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.UNAUTHORIZED.value());
+    }
+
+    @Test
+    void shouldReturnUnauthorizedIfBearerIsInvalidWhenUpdatingProfile() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPutRequest(ProfileController.PATH, oDummyUser, "WRONG_TOKEN"))
                 .andReturn();
 
         // assert

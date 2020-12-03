@@ -1,13 +1,15 @@
 package com.catwalk.publicapicatwalk.dto;
 
 import com.catwalk.publicapicatwalk.model.constants.Sex;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserResponseDto implements Serializable {
 
     private String firstName;
