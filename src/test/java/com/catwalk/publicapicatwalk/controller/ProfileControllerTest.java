@@ -37,36 +37,31 @@ class ProfileControllerTest extends GenericIntegrationTest {
     @Autowired
     PasswordEncoder encoder;
 
-    private static Boolean initialised = false;
-
     private static User oDummyUser;
 
     private static String sBearerToken;
 
     @BeforeEach
     void setUp() throws Exception {
-        if (!initialised) {
-            userRepository.deleteAll();
-            User oDummyUser = User.builder()
-                    .email("user@catwalk.ro")
-                    .password(encoder.encode("Parola123"))
-                    .firstName("User")
-                    .lastName("Test")
-                    .role("ROLE_USER")
-                    .sex(Sex.Masculin)
-                    .greutate(60.5)
-                    .inaltime(1.75)
-                    .varsta(20)
-                    .build();
-            LoginRequest loginRequest = LoginRequest.builder().email("user@catwalk.ro").password("Parola123").build();
-            this.oDummyUser = userRepository.save(oDummyUser);
-            MvcResult oResponse = mockMvc
-                    .perform(createPostRequest(AuthController.PATH + "/login", loginRequest))
-                    .andReturn();
-            JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
-            this.sBearerToken = oJSONResponse.getJSONObject("data").get("token").toString();
-            initialised = true;
-        }
+        userRepository.deleteAll();
+        User oDummyUser = User.builder()
+                .email("user@catwalk.ro")
+                .password(encoder.encode("Parola123"))
+                .firstName("User")
+                .lastName("Test")
+                .role("ROLE_USER")
+                .sex(Sex.Masculin)
+                .greutate(60.5)
+                .inaltime(1.75)
+                .varsta(20)
+                .build();
+        LoginRequest loginRequest = LoginRequest.builder().email("user@catwalk.ro").password("Parola123").build();
+        this.oDummyUser = userRepository.save(oDummyUser);
+        MvcResult oResponse = mockMvc
+                .perform(createPostRequest(AuthController.PATH + "/login", loginRequest))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+        this.sBearerToken = oJSONResponse.getJSONObject("data").get("token").toString();
     }
 
     @Test

@@ -170,7 +170,7 @@ class AuthControllerTest extends GenericIntegrationTest {
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
         assertThat(jwtUtils.getEmail(token)).isEqualTo("user@catwalk.ro");
         assertThat(jwtUtils.getName(token)).isEqualTo("User Test");
-        assertThat(jwtUtils.getRole(token)).isEqualTo("USER");
+        assertThat(jwtUtils.getRole(token)).isEqualTo("ROLE_USER");
     }
 
     @Test
