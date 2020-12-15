@@ -137,4 +137,56 @@ class UserManagementControllerTest extends GenericIntegrationTest {
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
     }
 
+    @Test
+    void shouldThrowErrorGetUserByEmailNonExistent() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createGetRequest(UserManagementController.PATH + "/asdfghjkl", sAdminBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
+    }
+
+    @Test
+    void shouldSuccesfullyBanUserByEmail() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPostRequest(UserManagementController.PATH + "/ban/" + oBasicUser.getEmail(), null, sAdminBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("email")).isEqualTo(oBasicUser.getEmail());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("isEnabled")).isEqualTo(false);
+    }
+
+    @Test
+    void shouldThrowErrorBanUserByEmailNonExistent() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPostRequest(UserManagementController.PATH + "/ban/asdfghjkl", null, sAdminBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
+    }
+
+    @Test
+    void shouldReturnForbiddenBanUser() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPostRequest(UserManagementController.PATH + "/ban/" + oBasicUser.getEmail(), null, sBasicBearerToken))
+                .andReturn();
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.FORBIDDEN.value());
+    }
+
 }
