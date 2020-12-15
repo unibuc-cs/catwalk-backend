@@ -55,6 +55,8 @@ public class User extends GenericEntity {
 
     private String role;
 
+    private Boolean isEnabled = true;
+
     public User(String username, String email, String password) {
         this.email = email;
         this.password = password;

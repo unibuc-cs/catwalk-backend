@@ -4,4 +4,5 @@ public interface Api {
     String ORIGIN_HOST = "http://localhost:3000";
     String BACKEND_HOST = "http://localhost:8080";
     String BASE_PATH = "/api/v1";
+    String BASE_ADMIN_PATH = "/api/v1/admin";
 }
