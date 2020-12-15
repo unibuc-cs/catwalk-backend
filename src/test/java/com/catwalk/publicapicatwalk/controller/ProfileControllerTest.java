@@ -54,6 +54,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
                 .greutate(60.5)
                 .inaltime(1.75)
                 .varsta(20)
+                .isEnabled(true)
                 .build();
         LoginRequest loginRequest = LoginRequest.builder().email("user@catwalk.ro").password("Parola123").build();
         this.oDummyUser = userRepository.save(oDummyUser);
