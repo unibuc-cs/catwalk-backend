@@ -65,6 +65,7 @@ public class AuthController {
 
         oRequest.setPassword(encoder.encode(oRequest.getPassword()));
         oRequest.setRole("ROLE_USER");
+        oRequest.setIsEnabled(true);
         userRepository.save(oRequest);
 
         ResponseDto oResponse = ResponseDto.builder().status(StatusCode.SUCCESS).build();

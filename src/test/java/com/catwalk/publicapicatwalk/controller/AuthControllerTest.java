@@ -58,6 +58,7 @@ class AuthControllerTest extends GenericIntegrationTest {
                 .greutate(60.5)
                 .inaltime(1.75)
                 .varsta(20)
+                .isEnabled(true)
                 .build();
         User oAdminDummyUser = User.builder()
                 .email("admin@catwalk.ro")
@@ -69,6 +70,7 @@ class AuthControllerTest extends GenericIntegrationTest {
                 .greutate(60.5)
                 .inaltime(1.75)
                 .varsta(20)
+                .isEnabled(true)
                 .build();
         userRepository.saveAll(Arrays.asList(oDummyUser, oAdminDummyUser));
     }
