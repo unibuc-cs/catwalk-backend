@@ -31,7 +31,7 @@ public class Exercise extends GenericEntity {
     private Integer score;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="exercise")
+    @OneToMany(mappedBy="exercise", cascade = CascadeType.ALL)
     private Set<Media> media;
 
     @JsonBackReference

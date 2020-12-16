@@ -28,7 +28,7 @@ public class Alimentation extends GenericEntity {
     private Integer score;
 
     @JsonManagedReference
-    @OneToMany(mappedBy="alimentation")
+    @OneToMany(mappedBy="alimentation", cascade = CascadeType.ALL)
     private Set<Media> media;
 
     @JsonBackReference
