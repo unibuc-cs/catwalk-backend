@@ -1,9 +1,11 @@
-package com.catwalk.publicapicatwalk.controller.web;
+package com.catwalk.publicapicatwalk.controller;
 
+import com.catwalk.publicapicatwalk.controller.web.Api;
+import com.catwalk.publicapicatwalk.controller.web.ErrorCode;
+import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.controller.web.dto.ResponseDto;
 import com.catwalk.publicapicatwalk.dto.ExerciseReqDto;
 import com.catwalk.publicapicatwalk.dto.MediaReqDto;
-import com.catwalk.publicapicatwalk.dto.UserResponseDto;
 import com.catwalk.publicapicatwalk.exception.GenericException;
 import com.catwalk.publicapicatwalk.model.Exercise;
 import com.catwalk.publicapicatwalk.model.Media;
