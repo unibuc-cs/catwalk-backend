@@ -57,6 +57,8 @@ class ExercisesControllerTest extends GenericIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
+        mediaRepository.deleteAll();
+        exerciseRepository.deleteAll();
         userRepository.deleteAll();
         User oDummyUser = User.builder().email("user@catwalk.ro").password(encoder.encode("Parola123"))
                 .firstName("User").lastName("Test").role("ROLE_USER").sex(Sex.Masculin)
