@@ -49,7 +49,7 @@ class ExercisesControllerTest extends GenericIntegrationTest {
 
     private static User oDummyUser;
 
-    private static String sBearerToken;
+    private static String sBearerToken, sAnotherBearerToken;
 
     private static Exercise oExercise;
 
@@ -62,13 +62,24 @@ class ExercisesControllerTest extends GenericIntegrationTest {
                 .firstName("User").lastName("Test").role("ROLE_USER").sex(Sex.Masculin)
                 .greutate(60.5).inaltime(1.75).varsta(20).isEnabled(true)
                 .build();
+        User oAnotherDummyUser = User.builder().email("user2@catwalk.ro").password(encoder.encode("Parola123"))
+                .firstName("User").lastName("Test").role("ROLE_USER").sex(Sex.Masculin)
+                .greutate(60.5).inaltime(1.75).varsta(20).isEnabled(true)
+                .build();
+        userRepository.save(oAnotherDummyUser);
         LoginRequest loginRequest = LoginRequest.builder().email("user@catwalk.ro").password("Parola123").build();
+        LoginRequest anotherLoginRequest = LoginRequest.builder().email("user2@catwalk.ro").password("Parola123").build();
         this.oDummyUser = userRepository.save(oDummyUser);
         MvcResult oResponse = mockMvc
                 .perform(createPostRequest(AuthController.PATH + "/login", loginRequest))
                 .andReturn();
         JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
         this.sBearerToken = oJSONResponse.getJSONObject("data").get("token").toString();
+        oResponse = mockMvc
+                .perform(createPostRequest(AuthController.PATH + "/login", anotherLoginRequest))
+                .andReturn();
+        oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+        this.sAnotherBearerToken = oJSONResponse.getJSONObject("data").get("token").toString();
         Exercise oEx = Exercise.builder().name("Sport").minutes(20).noExercises(2).score(100).user(this.oDummyUser).build();
         this.oExercise = exerciseRepository.save(oEx);
         Media oMed = Media.builder().url("something here").exercise(this.oExercise).build();
@@ -106,6 +117,32 @@ class ExercisesControllerTest extends GenericIntegrationTest {
     }
 
     @Test
+    void shouldReturnErrorOneExerciseForUserByIdWhenIdNotFound() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createGetRequest(ExercisesController.PATH + "/my/" + "asdfgh", sBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
+    }
+
+    @Test
+    void shouldReturnErrorOneExerciseForUserByIdWhenIdNotMatchesTheUser() throws Exception {
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createGetRequest(ExercisesController.PATH + "/my/" + oExercise.getId(), sAnotherBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
+    }
+
+    @Test
     void shouldSuccessfullyCreateExerciseForUser() throws Exception {
         // arrange
         ExerciseReqDto oReq = ExerciseReqDto.builder().name("Yoga").minutes(60).noExercises(1).score(80).build();
@@ -137,6 +174,22 @@ class ExercisesControllerTest extends GenericIntegrationTest {
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("exercise").getJSONArray("media").length()).isEqualTo(2);
+    }
+
+    @Test
+    void shouldReturnErrorAddMediaExerciseForUserByIdWhenIdNotMatchesTheUser() throws Exception {
+        // arrange
+        MediaReqDto oReq = MediaReqDto.builder().url("google").build();
+
+        // act
+        MvcResult oResponse = mockMvc
+                .perform(createPostRequest(ExercisesController.PATH + "/my/" + oExercise.getId(), oReq, sAnotherBearerToken))
+                .andReturn();
+        JSONObject oJSONResponse = new JSONObject(oResponse.getResponse().getContentAsString());
+
+        // assert
+        assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+        assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.FAIL.toString());
     }
 
 
