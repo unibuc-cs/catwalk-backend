@@ -32,19 +32,15 @@ public class SignupRequest {
     @Size(max = 50)
     private String lastName;
 
-    @NotBlank(message = "{sex.notblank}")
     @NotNull(message = "{sex.notblank}")
     private Sex sex;
 
-    @NotBlank(message = "{intaltime.notblank}")
     @NotNull(message = "{intaltime.notblank}")
     private Double inaltime; // m
 
-    @NotBlank(message = "{greutate.notblank}")
     @NotNull(message = "{greutate.notblank}")
     private Double greutate; // kg
 
-    @NotBlank(message = "{varsta.notblank}")
     @NotNull(message = "{varsta.notblank}")
     private Integer varsta; // ani
 

@@ -5,10 +5,12 @@ import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.controller.web.dto.ResponseDto;
 import com.catwalk.publicapicatwalk.dto.JwtResponse;
 import com.catwalk.publicapicatwalk.dto.LoginRequest;
+import com.catwalk.publicapicatwalk.dto.SignupRequest;
 import com.catwalk.publicapicatwalk.exception.GenericException;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.catwalk.publicapicatwalk.security.jwt.JwtUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +43,9 @@ public class AuthController {
     @Autowired
     JwtUtils jwtUtils;
 
+    @Autowired
+    ModelMapper modelMapper;
+
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Validated @RequestBody LoginRequest loginRequest) {
 
@@ -58,15 +63,17 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody User oRequest) {
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest oRequest) {
         if (userRepository.existsByEmail(oRequest.getEmail())) {
             throw new GenericException(EMAIL_NOT_UNIQUE);
         }
 
-        oRequest.setPassword(encoder.encode(oRequest.getPassword()));
-        oRequest.setRole("ROLE_USER");
-        oRequest.setIsEnabled(true);
-        userRepository.save(oRequest);
+        User oUserToSave = modelMapper.map(oRequest, User.class);
+
+        oUserToSave.setPassword(encoder.encode(oRequest.getPassword()));
+        oUserToSave.setRole("ROLE_USER");
+        oUserToSave.setIsEnabled(true);
+        userRepository.save(oUserToSave);
 
         ResponseDto oResponse = ResponseDto.builder().status(StatusCode.SUCCESS).build();
 
