@@ -28,4 +28,6 @@ public class AdminUserResponseDto implements Serializable {
 
     private Boolean isEnabled;
 
+    private String avatar;
+
 }

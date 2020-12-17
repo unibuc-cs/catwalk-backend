@@ -55,6 +55,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
                 .inaltime(1.75)
                 .varsta(20)
                 .isEnabled(true)
+                .avatar("AVATAR_DEMO")
                 .build();
         LoginRequest loginRequest = LoginRequest.builder().email("user@catwalk.ro").password("Parola123").build();
         this.oDummyUser = userRepository.save(oDummyUser);
@@ -83,6 +84,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("inaltime")).isEqualTo(oDummyUser.getInaltime());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("greutate")).isEqualTo(oDummyUser.getGreutate());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("varsta")).isEqualTo(oDummyUser.getVarsta());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("avatar")).isEqualTo(oDummyUser.getAvatar());
     }
 
     @Test
@@ -115,6 +117,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
                 .firstName("Andreea")
                 .lastName("Popescu")
                 .sex(Sex.Feminin)
+                .avatar("ALT_AVATAR")
                 .varsta(24)
                 .build();
 
@@ -134,6 +137,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("inaltime")).isEqualTo(oDummyUser.getInaltime());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("greutate")).isEqualTo(oDummyUser.getGreutate());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("varsta")).isEqualTo(oRequest.getVarsta());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("avatar")).isEqualTo(oRequest.getAvatar());
 
         // DB-level assert
         Optional<User> oDbUser = userRepository.findByEmail(oDummyUser.getEmail());
@@ -144,6 +148,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
         assertThat(oDbUser.get().getInaltime()).isEqualTo(oDummyUser.getInaltime());
         assertThat(oDbUser.get().getGreutate()).isEqualTo(oDummyUser.getGreutate());
         assertThat(oDbUser.get().getVarsta()).isEqualTo(oRequest.getVarsta());
+        assertThat(oDbUser.get().getAvatar()).isEqualTo(oRequest.getAvatar());
     }
 
     @Test
