@@ -57,6 +57,8 @@ public class User extends GenericEntity {
 
     private Boolean isEnabled = true;
 
+    private String avatar;
+
     @JsonManagedReference
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private Set<Exercise> exercises;

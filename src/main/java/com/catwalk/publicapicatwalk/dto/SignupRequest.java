@@ -44,4 +44,6 @@ public class SignupRequest {
     @NotNull(message = "{varsta.notblank}")
     private Integer varsta; // ani
 
+    private String avatar;
+
 }

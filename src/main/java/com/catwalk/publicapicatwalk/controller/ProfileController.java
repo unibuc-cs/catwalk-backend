@@ -60,6 +60,7 @@ public class ProfileController {
         if (oRequest.getInaltime() != null) oExistingUser.get().setInaltime(oRequest.getInaltime());
         if (oRequest.getSex() != null) oExistingUser.get().setSex(oRequest.getSex());
         if (oRequest.getVarsta() != null) oExistingUser.get().setVarsta(oRequest.getVarsta());
+        if (oRequest.getAvatar() != null) oExistingUser.get().setAvatar(oRequest.getAvatar());
 
         ResponseDto oResponse = ResponseDto.builder()
                 .status(StatusCode.SUCCESS)

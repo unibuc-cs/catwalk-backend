@@ -26,4 +26,6 @@ public class UserResponseDto implements Serializable {
 
     private Integer varsta;
 
+    private String avatar;
+
 }
