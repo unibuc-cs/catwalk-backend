@@ -43,8 +43,8 @@ public class StartupDataLoader implements ApplicationListener<ContextRefreshedEv
                 .build();
         User oBasicUser = User.builder()
                 .email("user@user.ro")
-                .firstName("Admin")
-                .lastName("Super")
+                .firstName("Basic")
+                .lastName("User")
                 .greutate(0D)
                 .inaltime(0D)
                 .role("ROLE_USER")
