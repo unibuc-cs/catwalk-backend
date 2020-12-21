@@ -9,9 +9,11 @@ import com.catwalk.publicapicatwalk.dto.MediaReqDto;
 import com.catwalk.publicapicatwalk.exception.GenericException;
 import com.catwalk.publicapicatwalk.model.Exercise;
 import com.catwalk.publicapicatwalk.model.Media;
+import com.catwalk.publicapicatwalk.model.Scoreboard;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.repository.ExerciseRepository;
 import com.catwalk.publicapicatwalk.repository.MediaRepository;
+import com.catwalk.publicapicatwalk.repository.ScoreboardRepository;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -39,6 +41,9 @@ public class ExercisesController {
 
     @Autowired
     ExerciseRepository exerciseRepository;
+
+    @Autowired
+    ScoreboardRepository scoreboardRepository;
 
     @Autowired
     MediaRepository mediaRepository;
@@ -89,6 +94,11 @@ public class ExercisesController {
         Exercise oExToSave = convertToExercise(oReq);
         oExToSave.setUser(oUser.get());
         Exercise oSavedEx = exerciseRepository.save(oExToSave);
+
+        Scoreboard oScoreboard = scoreboardRepository.findByUser(oUser.get()).orElseThrow(GenericException::new);
+        oScoreboard.increaseEx(oSavedEx.getScore());
+        scoreboardRepository.save(oScoreboard);
+
         ResponseDto oResponse = ResponseDto.builder()
                 .status(StatusCode.SUCCESS)
                 .data(SingleDto.builder().obj(oSavedEx).build())

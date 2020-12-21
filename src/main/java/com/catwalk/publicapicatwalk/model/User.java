@@ -67,6 +67,10 @@ public class User extends GenericEntity {
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private Set<Alimentation> alimentations;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "scoreboard_id", referencedColumnName = "id")
+    private Scoreboard scoreboard;
+
     public User(String username, String email, String password) {
         this.email = email;
         this.password = password;
