@@ -65,7 +65,7 @@ public class ScoreboardController {
 
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getByUserId(@PathVariable("id") String userId) {
+    public ResponseEntity<?> getByUserId(@PathVariable("userId") String userId) {
         User oUser = userRepository.findById(userId).orElseThrow(GenericException::new);
         Scoreboard oScoreboard = scoreboardRepository.findByUser(oUser).orElseThrow(GenericException::new);
         ResponseDto oResponse = ResponseDto.builder()
