@@ -6,6 +6,7 @@ import com.catwalk.publicapicatwalk.dto.LoginRequest;
 import com.catwalk.publicapicatwalk.dto.SignupRequest;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
+import com.catwalk.publicapicatwalk.repository.ScoreboardRepository;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.catwalk.publicapicatwalk.security.jwt.JwtUtils;
 import org.json.JSONObject;
@@ -37,6 +38,9 @@ class AuthControllerTest extends GenericIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
+    ScoreboardRepository scoreboardRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     @Autowired
@@ -45,6 +49,7 @@ class AuthControllerTest extends GenericIntegrationTest {
     @BeforeEach
     void setUp() {
         // empty table
+        scoreboardRepository.deleteAll();
         userRepository.deleteAll();
 
         // create dummy user and admin

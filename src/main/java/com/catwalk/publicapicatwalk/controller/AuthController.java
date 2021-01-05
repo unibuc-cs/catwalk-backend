@@ -7,7 +7,9 @@ import com.catwalk.publicapicatwalk.dto.JwtResponse;
 import com.catwalk.publicapicatwalk.dto.LoginRequest;
 import com.catwalk.publicapicatwalk.dto.SignupRequest;
 import com.catwalk.publicapicatwalk.exception.GenericException;
+import com.catwalk.publicapicatwalk.model.Scoreboard;
 import com.catwalk.publicapicatwalk.model.User;
+import com.catwalk.publicapicatwalk.repository.ScoreboardRepository;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.catwalk.publicapicatwalk.security.jwt.JwtUtils;
 import org.modelmapper.ModelMapper;
@@ -36,6 +38,9 @@ public class AuthController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ScoreboardRepository scoreboardRepository;
 
     @Autowired
     PasswordEncoder encoder;
@@ -73,7 +78,16 @@ public class AuthController {
         oUserToSave.setPassword(encoder.encode(oRequest.getPassword()));
         oUserToSave.setRole("ROLE_USER");
         oUserToSave.setIsEnabled(true);
-        userRepository.save(oUserToSave);
+        User oSavedUser = userRepository.save(oUserToSave);
+
+        // create Scoreboard entry for the newly registered user with 0 values
+        Scoreboard oScoreboard = Scoreboard.builder()
+                .user(oSavedUser)
+                .alimentationScore(0)
+                .exerciseScore(0)
+                .totalScore(0)
+                .build();
+        scoreboardRepository.save(oScoreboard);
 
         ResponseDto oResponse = ResponseDto.builder().status(StatusCode.SUCCESS).build();
 

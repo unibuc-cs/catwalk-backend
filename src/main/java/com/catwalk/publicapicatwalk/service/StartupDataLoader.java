@@ -1,7 +1,9 @@
 package com.catwalk.publicapicatwalk.service;
 
+import com.catwalk.publicapicatwalk.model.Scoreboard;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
+import com.catwalk.publicapicatwalk.repository.ScoreboardRepository;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class StartupDataLoader implements ApplicationListener<ContextRefreshedEv
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ScoreboardRepository scoreboardRepository;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -54,7 +59,15 @@ public class StartupDataLoader implements ApplicationListener<ContextRefreshedEv
                 .isEnabled(true)
                 .build();
         userRepository.save(oAdminUser);
-        userRepository.save(oBasicUser);
+        oBasicUser = userRepository.save(oBasicUser);
+
+        Scoreboard oScoreboard = Scoreboard.builder()
+                .user(oBasicUser)
+                .alimentationScore(0)
+                .exerciseScore(0)
+                .totalScore(0)
+                .build();
+        scoreboardRepository.save(oScoreboard);
 
         alreadyLoaded = true;
     }

@@ -7,6 +7,7 @@ import com.catwalk.publicapicatwalk.controller.web.StatusCode;
 import com.catwalk.publicapicatwalk.dto.LoginRequest;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
+import com.catwalk.publicapicatwalk.repository.ScoreboardRepository;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,6 +39,9 @@ class UserManagementControllerTest extends GenericIntegrationTest {
     private UserRepository userRepository;
 
     @Autowired
+    ScoreboardRepository scoreboardRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     private static User oBasicUser, oAdminUser;
@@ -46,6 +50,7 @@ class UserManagementControllerTest extends GenericIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
+        scoreboardRepository.deleteAll();
         userRepository.deleteAll();
         User oAdminUser = User.builder()
                 .email("admin@admin.ro")

@@ -9,9 +9,11 @@ import com.catwalk.publicapicatwalk.dto.MediaReqDto;
 import com.catwalk.publicapicatwalk.exception.GenericException;
 import com.catwalk.publicapicatwalk.model.Alimentation;
 import com.catwalk.publicapicatwalk.model.Media;
+import com.catwalk.publicapicatwalk.model.Scoreboard;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.repository.AlimentationRepository;
 import com.catwalk.publicapicatwalk.repository.MediaRepository;
+import com.catwalk.publicapicatwalk.repository.ScoreboardRepository;
 import com.catwalk.publicapicatwalk.repository.UserRepository;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -39,6 +41,9 @@ public class AlimentationController {
 
     @Autowired
     private AlimentationRepository alimentationRepository;
+
+    @Autowired
+    ScoreboardRepository scoreboardRepository;
 
     @Autowired
     MediaRepository mediaRepository;
@@ -89,6 +94,19 @@ public class AlimentationController {
         Alimentation oAlToSave = convertToAlimentation(oReq);
         oAlToSave.setUser(oUser.get());
         Alimentation oSavedAl = alimentationRepository.save(oAlToSave);
+
+        Optional<Scoreboard> optionalScoreboard = scoreboardRepository.findByUser(oUser.get());
+        Scoreboard oScoreboard;
+        if (!optionalScoreboard.isPresent()) {
+            Scoreboard scoreboard = Scoreboard.builder().user(oUser.get()).alimentationScore(0).exerciseScore(0).totalScore(0).build();
+            oScoreboard = scoreboardRepository.save(scoreboard);
+
+        } else {
+            oScoreboard = optionalScoreboard.get();
+        }
+        oScoreboard.increaseAlim(oSavedAl.getScore());
+        scoreboardRepository.save(oScoreboard);
+
         ResponseDto oResponse = ResponseDto.builder()
                 .status(StatusCode.SUCCESS)
                 .data(SingleAlimDto.builder().obj(oSavedAl).build())
