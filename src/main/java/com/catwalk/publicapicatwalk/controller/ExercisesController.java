@@ -95,7 +95,15 @@ public class ExercisesController {
         oExToSave.setUser(oUser.get());
         Exercise oSavedEx = exerciseRepository.save(oExToSave);
 
-        Scoreboard oScoreboard = scoreboardRepository.findByUser(oUser.get()).orElseThrow(GenericException::new);
+        Optional<Scoreboard> optionalScoreboard = scoreboardRepository.findByUser(oUser.get());
+        Scoreboard oScoreboard;
+        if (!optionalScoreboard.isPresent()) {
+            Scoreboard scoreboard = Scoreboard.builder().user(oUser.get()).alimentationScore(0).exerciseScore(0).totalScore(0).build();
+            oScoreboard = scoreboardRepository.save(scoreboard);
+
+        } else {
+            oScoreboard = optionalScoreboard.get();
+        }
         oScoreboard.increaseEx(oSavedEx.getScore());
         scoreboardRepository.save(oScoreboard);
 

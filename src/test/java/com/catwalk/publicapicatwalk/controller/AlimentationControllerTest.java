@@ -10,10 +10,7 @@ import com.catwalk.publicapicatwalk.model.Exercise;
 import com.catwalk.publicapicatwalk.model.Media;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
-import com.catwalk.publicapicatwalk.repository.AlimentationRepository;
-import com.catwalk.publicapicatwalk.repository.ExerciseRepository;
-import com.catwalk.publicapicatwalk.repository.MediaRepository;
-import com.catwalk.publicapicatwalk.repository.UserRepository;
+import com.catwalk.publicapicatwalk.repository.*;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,6 +48,9 @@ class AlimentationControllerTest extends GenericIntegrationTest {
     ExerciseRepository exerciseRepository;
 
     @Autowired
+    ScoreboardRepository scoreboardRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     private static User oDummyUser;
@@ -64,6 +64,7 @@ class AlimentationControllerTest extends GenericIntegrationTest {
     @BeforeEach
     void setUp() throws Exception {
         mediaRepository.deleteAll();
+        scoreboardRepository.deleteAll();
         alimentationRepository.deleteAll();
         exerciseRepository.deleteAll();
         userRepository.deleteAll();

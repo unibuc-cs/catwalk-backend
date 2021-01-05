@@ -8,10 +8,7 @@ import com.catwalk.publicapicatwalk.model.Exercise;
 import com.catwalk.publicapicatwalk.model.Media;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
-import com.catwalk.publicapicatwalk.repository.AlimentationRepository;
-import com.catwalk.publicapicatwalk.repository.ExerciseRepository;
-import com.catwalk.publicapicatwalk.repository.MediaRepository;
-import com.catwalk.publicapicatwalk.repository.UserRepository;
+import com.catwalk.publicapicatwalk.repository.*;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +46,9 @@ class ExercisesControllerTest extends GenericIntegrationTest {
     MediaRepository mediaRepository;
 
     @Autowired
+    ScoreboardRepository scoreboardRepository;
+
+    @Autowired
     PasswordEncoder encoder;
 
     private static User oDummyUser;
@@ -63,6 +63,7 @@ class ExercisesControllerTest extends GenericIntegrationTest {
     void setUp() throws Exception {
         mediaRepository.deleteAll();
         exerciseRepository.deleteAll();
+        scoreboardRepository.deleteAll();
         alimentationRepository.deleteAll();
         userRepository.deleteAll();
         User oDummyUser = User.builder().email("user@catwalk.ro").password(encoder.encode("Parola123"))

@@ -95,7 +95,15 @@ public class AlimentationController {
         oAlToSave.setUser(oUser.get());
         Alimentation oSavedAl = alimentationRepository.save(oAlToSave);
 
-        Scoreboard oScoreboard = scoreboardRepository.findByUser(oUser.get()).orElseThrow(GenericException::new);
+        Optional<Scoreboard> optionalScoreboard = scoreboardRepository.findByUser(oUser.get());
+        Scoreboard oScoreboard;
+        if (!optionalScoreboard.isPresent()) {
+            Scoreboard scoreboard = Scoreboard.builder().user(oUser.get()).alimentationScore(0).exerciseScore(0).totalScore(0).build();
+            oScoreboard = scoreboardRepository.save(scoreboard);
+
+        } else {
+            oScoreboard = optionalScoreboard.get();
+        }
         oScoreboard.increaseAlim(oSavedAl.getScore());
         scoreboardRepository.save(oScoreboard);
 
