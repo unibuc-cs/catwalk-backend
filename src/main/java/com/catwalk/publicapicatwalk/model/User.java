@@ -67,6 +67,10 @@ public class User extends GenericEntity {
     @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
     private Set<Alimentation> alimentations;
 
+    @JsonManagedReference
+    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+    private Set<Badge> badges;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "scoreboard_id", referencedColumnName = "id")
     private Scoreboard scoreboard;
