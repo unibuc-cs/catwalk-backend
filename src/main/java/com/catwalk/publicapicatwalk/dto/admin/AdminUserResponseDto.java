@@ -12,6 +12,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 public class AdminUserResponseDto implements Serializable {
 
+    private String id;
+
     private String firstName;
 
     private String lastName;

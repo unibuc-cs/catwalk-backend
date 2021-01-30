@@ -77,6 +77,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
         // assert
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("id")).isEqualTo(oDummyUser.getId());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("email")).isEqualTo(oDummyUser.getEmail());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("firstName")).isEqualTo(oDummyUser.getFirstName());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("lastName")).isEqualTo(oDummyUser.getLastName());
@@ -130,6 +131,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
         // assert
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("id")).isEqualTo(oDummyUser.getId());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("email")).isEqualTo(oDummyUser.getEmail());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("firstName")).isEqualTo(oRequest.getFirstName());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("lastName")).isEqualTo(oRequest.getLastName());
@@ -141,6 +143,7 @@ class ProfileControllerTest extends GenericIntegrationTest {
 
         // DB-level assert
         Optional<User> oDbUser = userRepository.findByEmail(oDummyUser.getEmail());
+        assertThat(oDbUser.get().getId()).isEqualTo(oDummyUser.getId());
         assertThat(oDbUser.get().getEmail()).isEqualTo(oDummyUser.getEmail());
         assertThat(oDbUser.get().getFirstName()).isEqualTo(oRequest.getFirstName());
         assertThat(oDbUser.get().getLastName()).isEqualTo(oRequest.getLastName());

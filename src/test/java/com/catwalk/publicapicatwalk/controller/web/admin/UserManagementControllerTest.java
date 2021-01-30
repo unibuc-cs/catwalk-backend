@@ -128,6 +128,7 @@ class UserManagementControllerTest extends GenericIntegrationTest {
         // assert
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("id")).isEqualTo(oBasicUser.getId());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("email")).isEqualTo(oBasicUser.getEmail());
     }
 
@@ -166,6 +167,7 @@ class UserManagementControllerTest extends GenericIntegrationTest {
         // assert
         assertThat(oResponse.getResponse().getStatus()).isEqualTo(HttpStatus.OK.value());
         assertThat(oJSONResponse.get("status")).isEqualTo(StatusCode.SUCCESS.toString());
+        assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("id")).isEqualTo(oBasicUser.getId());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("email")).isEqualTo(oBasicUser.getEmail());
         assertThat(oJSONResponse.getJSONObject("data").getJSONObject("user").get("isEnabled")).isEqualTo(false);
     }
