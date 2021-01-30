@@ -5,7 +5,7 @@ import com.catwalk.publicapicatwalk.dto.LoginRequest;
 import com.catwalk.publicapicatwalk.dto.UserResponseDto;
 import com.catwalk.publicapicatwalk.model.User;
 import com.catwalk.publicapicatwalk.model.constants.Sex;
-import com.catwalk.publicapicatwalk.repository.UserRepository;
+import com.catwalk.publicapicatwalk.repository.*;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,8 +41,24 @@ class ProfileControllerTest extends GenericIntegrationTest {
 
     private static String sBearerToken;
 
+    @Autowired
+    ExerciseRepository exerciseRepository;
+
+    @Autowired
+    AlimentationRepository alimentationRepository;
+
+    @Autowired
+    MediaRepository mediaRepository;
+
+    @Autowired
+    ScoreboardRepository scoreboardRepository;
+
     @BeforeEach
     void setUp() throws Exception {
+        mediaRepository.deleteAll();
+        exerciseRepository.deleteAll();
+        scoreboardRepository.deleteAll();
+        alimentationRepository.deleteAll();
         userRepository.deleteAll();
         User oDummyUser = User.builder()
                 .email("user@catwalk.ro")
